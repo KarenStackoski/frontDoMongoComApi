@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 function Menu() {
     const navigate = useNavigate();
 
+
     const handleNavigation = (path) => {
         navigate(path); // Navega para a rota especificada
+
     };
 
     return (

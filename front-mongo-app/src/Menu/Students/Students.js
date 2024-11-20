@@ -1,25 +1,26 @@
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-function Users() {
+function Students() {
     const navigate = useNavigate();
 
-    const handleCreateUser = (e) => {
+    const handleCreateStudent = (e) => {
         e.preventDefault(); // Impede o comportamento padrão do formulário
-        navigate('/createUsers'); // Navega para a página Menu
-      };
+        navigate('/createStudents'); // Navega para a página de criação de alunos
+    };
 
     return (
         <div>
-            <h1>Usuários</h1>
-            <button onClick={handleCreateUser}>+ Criar</button>
-            <table border='2'>
+            <h1>Alunos</h1>
+            <button onClick={handleCreateStudent}>+ Criar</button>
+            <table border="2">
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Usuário</th>
-                        <th>Nível</th>
-                        <th>Ativo</th>
+                        <th>Idade</th>
+                        <th>Telefone</th>
+                        <th>Status</th>
+                        <th>Data de Criação</th>
                         <th>Opções</th>
                     </tr>
                 </thead>
@@ -41,4 +42,4 @@ function Users() {
     );
 }
 
-export default Users;
+export default Students;
