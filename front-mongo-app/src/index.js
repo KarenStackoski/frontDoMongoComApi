@@ -7,6 +7,9 @@ import Users from './Menu/Users/Users';
 import CreateUsers from './Menu/Users/CreateUser/Create';
 import Students from './Menu/Students/Students'; // Importando Students
 import CreateStudents from './Menu/Students/CreateStudents/Create'; // Importando CreateStudent
+import Events from './Menu/Events/Events';
+import CreateEvents from './Menu/Events/CreateEvents/CreateEvents';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -20,6 +23,9 @@ root.render(
         <Route path="/createUsers" element={<CreateUsers />} />
         <Route path="/students" element={<Students />} /> {/* Rota para lista de Alunos */}
         <Route path="/createStudents" element={<CreateStudents />} /> {/* Rota para criar Alunos */}
+        <Route path='/Events' element={<Events/>}/>
+        <Route path='/CreateEvents' element={<CreateEvents/>}/>
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
