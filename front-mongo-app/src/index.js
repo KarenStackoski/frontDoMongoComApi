@@ -5,6 +5,8 @@ import App from './App';
 import Menu from './Menu/Menu';
 import Users from './Menu/Users/Users'
 import CreateUsers from './Menu/Users/CreateUser/Create'
+import Teachers from './Menu/Teachers/Teachers'
+import CreateTeachers from './Menu/Teachers/CreateTeacher/TeachersCreate'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,6 +17,8 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<Menu />} />
         <Route path='/users' element={<Users />}/>
+        <Route path='/teachers' element={<Teachers />}/>
+        <Route path='/createteacher' element={<CreateTeachers />}/>
         <Route path='/createUsers' element={<CreateUsers />}/>
       </Routes>
     </BrowserRouter>

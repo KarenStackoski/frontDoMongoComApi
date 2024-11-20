@@ -8,6 +8,10 @@ function Menu() {
         e.preventDefault(); // Impede o comportamento padrão do formulário
         navigate('/users'); // Navega para a página Menu
       };
+      const handleTeachers = (e) => {
+        e.preventDefault(); // Impede o comportamento padrão do formulário
+        navigate('/teachers'); // Navega para a página Menu
+      };
 
     return (
         <div>
@@ -15,7 +19,7 @@ function Menu() {
             <button className="options" onClick={handleUser}>Usuários</button>
             <button className="options">Alunos</button>
             <button className="options">Profissionais</button>
-            <button className="options">Professores</button>
+            <button className="options" onClick={handleTeachers}>Professores</button>
             <button className="options">Eventos</button>
             <button className="options">Agendamentos</button>
         </div>
