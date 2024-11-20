@@ -25,16 +25,9 @@ function Menu() {
             <h1>Menu de opções</h1>
 
             <button className="options" onClick={handleUser}>Usuários</button>
-            <button className="options">Alunos</button>
-            <button className="options">Profissionais</button>
             <button className="options" onClick={handleTeachers}>Professores</button>
-            <button className="options">Eventos</button>
-            <button className="options">Agendamentos</button>
-
-            <button className="options" onClick={() => handleNavigation('/users')}>Usuários</button>
             <button className="options" onClick={() => handleNavigation('/students')}>Alunos</button>
             <button className="options" onClick={() => handleNavigation('/professionals')}>Profissionais</button>
-            <button className="options" onClick={() => handleNavigation('/teachers')}>Professores</button>
             <button className="options" onClick={() => handleNavigation('/Events')}>Eventos</button>
             <button className="options" onClick={() => handleNavigation('/schedules')}>Agendamentos</button>
 
