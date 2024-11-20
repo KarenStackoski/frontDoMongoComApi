@@ -2,11 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Menu from './Menu/Menu';
+import Users from './Menu/Users/Users'
+import CreateUsers from './Menu/Users/CreateUser/Create'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path='/users' element={<Users />}/>
+        <Route path='/createUsers' element={<CreateUsers />}/>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
