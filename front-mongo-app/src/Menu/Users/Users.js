@@ -12,8 +12,31 @@ function Users() {
         <div>
             <h1>Usuários</h1>
             <button onClick={handleCreateUser}>+ Criar</button>
-            <button>Deletar</button>
-            <button>Editar</button>
+            <table border='2'>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Usuário</th>
+                        <th>Nível</th>
+                        <th>Ativo</th>
+                        <th>Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button>Deletar</button>
+                            <button>Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     );
 }
