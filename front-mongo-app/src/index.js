@@ -5,6 +5,8 @@ import App from './App';
 import Menu from './Menu/Menu';
 import Users from './Menu/Users/Users'
 import CreateUsers from './Menu/Users/CreateUser/Create'
+import Events from './Menu/Events/Events';
+import CreateEvents from './Menu/Events/CreateEvents/CreateEvents';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,6 +18,8 @@ root.render(
         <Route path="/menu" element={<Menu />} />
         <Route path='/users' element={<Users />}/>
         <Route path='/createUsers' element={<CreateUsers />}/>
+        <Route path='/Events' element={<Events/>}/>
+        <Route path='/CreateEvents' element={<CreateEvents/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
