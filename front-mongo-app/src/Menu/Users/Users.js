@@ -11,7 +11,7 @@ function Users() {
         userEmail: '',
         userUser: '',
         userLevel: '',
-        userStatus: false,
+        userStatus: false
     });
 
     const getUsers = async () => {
@@ -24,6 +24,25 @@ function Users() {
         }
     };
 
+
+    const getUsersByName = async (userName) => {
+        try {
+            const response = await apiConfig.get(`/users/name/${userName}`);
+            setUsers(response.data);
+        } catch (error) {
+            console.log('Erro ao buscar usuário por nome', error);
+        }
+    };
+
+    const getUsersById = async (userId) => {
+        try {
+            const response = await apiConfig.get(`/users/${userId}`);
+            setUsers([response.data]);
+        } catch (error) {
+            console.log('Erro ao buscar usuário por id', error);
+        }
+    };
+
     const postUsers = async () => {
         try {
             const response = await apiConfig.post('/users', newUser);
@@ -33,17 +52,17 @@ function Users() {
                 userEmail: '',
                 userUser: '',
                 userLevel: '',
-                userStatus: false,
+                userStatus: false
             });
         } catch (error) {
             console.log('Erro ao criar usuário:', error);
         }
     };
 
-    const putUsersById = async (userId, updatedUser) => {
+    const putUsersById = async (idUser, updatedUser) => {
         try {
-            const response = await apiConfig.put(`/users/${userId}`, updatedUser);
-            setUsers(users.map((user) => (user.userId === userId ? response.data : user)));
+            const response = await apiConfig.put(`/users/${idUser}`, updatedUser);
+            setUsers(users.map(user => (user._id === idUser ? response.data : user)));
         } catch (error) {
             console.log('Erro ao editar usuário:', error);
         }
@@ -53,9 +72,9 @@ function Users() {
         try {
             console.log(`Tentando deletar usuário com ID: ${userId}`); // Log do ID a ser deletado
             await apiConfig.delete(`/users/${userId}`);
-            setUsers(users.filter((user) => user.userId !== userId));
+            setUsers(users.filter((user) => user._id !== userId));
         } catch (error) {
-            console.log('Erro ao deletar usuário:', error); // Log do erro
+            console.log('Não foi possível deletar o usuário: ', error);
         }
     };
 
@@ -72,9 +91,10 @@ function Users() {
         <div>
             <h1>Usuários</h1>
             <button onClick={handleCreateUser}>+ Criar</button>
-            <table border='2'>
+            <table border="2">
                 <thead>
                     <tr>
+                        <th>Id</th>
                         <th>Nome</th>
                         <th>E-mail</th>
                         <th>Usuário</th>
@@ -85,21 +105,15 @@ function Users() {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.userId}>
+                        <tr key={user._id}>
+                            <td scope="row">{user._id}</td>
                             <td>{user.userName}</td>
                             <td>{user.userEmail}</td>
                             <td>{user.userUser}</td>
                             <td>{user.userLevel}</td>
                             <td>{user.userStatus ? 'Sim' : 'Não'}</td>
                             <td>
-                                <button 
-                                    onClick={() => {
-                                        console.log('Clicou no botão Deletar para o ID:', user.userId);
-                                        deleteUsersById(user.userId);
-                                    }}
-                                >
-                                    Deletar
-                                </button>
+                                <button onClick={() => deleteUsersById(user._id)}>Deletar</button>
                                 <button>Editar</button>
                             </td>
                         </tr>
