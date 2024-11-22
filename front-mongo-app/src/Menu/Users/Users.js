@@ -6,77 +6,67 @@ function Users() {
     const navigate = useNavigate();
 
     const [users, setUsers] = useState([]);
-    const [newUser, setNewUser] = useState('');
+    const [newUser, setNewUser] = useState({
+        userName: '',
+        userEmail: '',
+        userUser: '',
+        userLevel: '',
+        userStatus: false,
+    });
 
     const getUsers = async () => {
         try {
             const response = await apiConfig.get('/users');
+            console.log('Usuários retornados:', response.data); // Verifique a estrutura dos dados retornados
             setUsers(response.data);
         } catch (error) {
-            console.log('Erro ao buscar todos os usuários', error);
+            console.log('Erro ao buscar todos os usuários:', error);
         }
-    }
-
-    const getUsersByName = async () => {
-        try {
-            const response = await apiConfig.get(`/users/name/${userName}`);
-            setUsers(response.data);
-        } catch (error) {
-            console.log('Erro ao buscar usuário por nome', error);
-        }
-    }
-
-    const getUsersById = async () => {
-        try {
-            const response = await apiConfig.get(`/users/${userId}`);
-            setUsers(response.data);
-        } catch (error) {
-            console.log('Erro ao buscar usuário por id', error);
-        }
-    }
+    };
 
     const postUsers = async () => {
         try {
-            const response = await apiConfig.post('/users', {
-                userName: userName,
-                userEmail: userEmail,
-                userUser: userUser,
-                userLevel: userLevel,
-                userStatus: userStatus
-            });
+            const response = await apiConfig.post('/users', newUser);
             setUsers([...users, response.data]);
-            setNewUser('');
+            setNewUser({
+                userName: '',
+                userEmail: '',
+                userUser: '',
+                userLevel: '',
+                userStatus: false,
+            });
         } catch (error) {
-            console.log('Erro ao criar usuário: ', error);
+            console.log('Erro ao criar usuário:', error);
         }
-    }
+    };
 
-    //isso deve ser transferido pra página de editar
-    const putUsersById = async (idUser) => {
+    const putUsersById = async (userId, updatedUser) => {
         try {
-            const response = await apiConfig.put(`/users/${userId}`, up);
+            const response = await apiConfig.put(`/users/${userId}`, updatedUser);
+            setUsers(users.map((user) => (user.userId === userId ? response.data : user)));
         } catch (error) {
-            console.log('Não possível editar o usuário: ', error);
+            console.log('Erro ao editar usuário:', error);
         }
-    }
+    };
 
-    const deleteUsersById = async () => {
+    const deleteUsersById = async (userId) => {
         try {
+            console.log(`Tentando deletar usuário com ID: ${userId}`); // Log do ID a ser deletado
             await apiConfig.delete(`/users/${userId}`);
             setUsers(users.filter((user) => user.userId !== userId));
         } catch (error) {
-            console.log('Não foi possível deletar o usuário: ', error);            
+            console.log('Erro ao deletar usuário:', error); // Log do erro
         }
-    }
+    };
 
     useEffect(() => {
         getUsers();
     }, []);
 
     const handleCreateUser = (e) => {
-        e.preventDefault(); // Impede o comportamento padrão do formulário
-        navigate('/createUsers'); // Navega para a página Menu
-      };
+        e.preventDefault();
+        navigate('/createUsers');
+    };
 
     return (
         <div>
@@ -94,15 +84,22 @@ function Users() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user => (
-                        <tr key={user.idUser}>
+                    {users.map((user) => (
+                        <tr key={user.userId}>
                             <td>{user.userName}</td>
                             <td>{user.userEmail}</td>
                             <td>{user.userUser}</td>
                             <td>{user.userLevel}</td>
                             <td>{user.userStatus ? 'Sim' : 'Não'}</td>
                             <td>
-                                <button onClick={() => deleteUsersById(user.userId)}>Deletar</button>
+                                <button 
+                                    onClick={() => {
+                                        console.log('Clicou no botão Deletar para o ID:', user.userId);
+                                        deleteUsersById(user.userId);
+                                    }}
+                                >
+                                    Deletar
+                                </button>
                                 <button>Editar</button>
                             </td>
                         </tr>
