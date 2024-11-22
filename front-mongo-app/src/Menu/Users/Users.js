@@ -17,11 +17,13 @@ function Users() {
     const getUsers = async () => {
         try {
             const response = await apiConfig.get('/users');
+            console.log('Usuários retornados:', response.data); // Verifique a estrutura dos dados retornados
             setUsers(response.data);
         } catch (error) {
-            console.log('Erro ao buscar todos os usuários', error);
+            console.log('Erro ao buscar todos os usuários:', error);
         }
     };
+
 
     const getUsersByName = async (userName) => {
         try {
@@ -53,7 +55,7 @@ function Users() {
                 userStatus: false
             });
         } catch (error) {
-            console.log('Erro ao criar usuário: ', error);
+            console.log('Erro ao criar usuário:', error);
         }
     };
 
@@ -62,12 +64,13 @@ function Users() {
             const response = await apiConfig.put(`/users/${idUser}`, updatedUser);
             setUsers(users.map(user => (user._id === idUser ? response.data : user)));
         } catch (error) {
-            console.log('Não possível editar o usuário: ', error);
+            console.log('Erro ao editar usuário:', error);
         }
     };
 
     const deleteUsersById = async (userId) => {
         try {
+            console.log(`Tentando deletar usuário com ID: ${userId}`); // Log do ID a ser deletado
             await apiConfig.delete(`/users/${userId}`);
             setUsers(users.filter((user) => user._id !== userId));
         } catch (error) {
