@@ -14,6 +14,8 @@ function Users() {
         userStatus: false
     });
 
+    const [editUserById, setEditUserById] = useState(null);
+
     const getUsers = async () => {
         try {
             const response = await apiConfig.get('/users');
@@ -24,6 +26,16 @@ function Users() {
         }
     };
 
+    const handleEditUser = (user) => {
+        setEditUserById(user._id);
+        setNewUser({
+            userName: user.userName,
+            userEmail: user.userEmail,
+            userUser: user.userUser,
+            userLevel: user.userLevel,
+            userStatus: user.userStatus
+        });
+    }
 
     const getUsersByName = async (userName) => {
         try {
@@ -59,10 +71,22 @@ function Users() {
         }
     };
 
-    const putUsersById = async (idUser, updatedUser) => {
+    const putUsersById = async () => {
         try {
-            const response = await apiConfig.put(`/users/${idUser}`, updatedUser);
-            setUsers(users.map(user => (user._id === idUser ? response.data : user)));
+            const response = await apiConfig.put(`/users/${editUserById}`, newUser);
+            setUsers(
+                users.map((user) => 
+                    user._id === editUserById ? response.data : user
+                )
+            );
+            setEditUserById(null);
+            setNewUser({
+                userName: '',
+                userEmail: '',
+                userUser: '',
+                userLevel: '',
+                userStatus: false
+            })
         } catch (error) {
             console.log('Erro ao editar usuário:', error);
         }
@@ -77,6 +101,11 @@ function Users() {
             console.log('Não foi possível deletar o usuário: ', error);
         }
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        putUsersById();
+    }
 
     useEffect(() => {
         getUsers();
@@ -114,12 +143,77 @@ function Users() {
                             <td>{user.userStatus ? 'Sim' : 'Não'}</td>
                             <td>
                                 <button onClick={() => deleteUsersById(user._id)}>Deletar</button>
-                                <button>Editar</button>
+                                <button onClick={() => handleEditUser(user)}>Editar</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {editUserById && (
+                <div>
+                    <h1>Editando Usuário</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label>Nome:</label>
+                            <input
+                                type='text'
+                                name='userName'
+                                value={newUser.userName}
+                                onChange={(e) =>
+                                    setNewUser({ ...newUser, userName: e.target.value})
+                                }
+                            />
+                        </div>
+                        <div>
+                            <label>E-mail:</label>
+                            <input
+                                type='text'
+                                name='userEmail'
+                                value={newUser.userEmail}
+                                onChange={(e) =>
+                                    setNewUser({ ...newUser, userEmail: e.target.value})
+                                }
+                            />
+                        </div>
+                        <div>
+                            <label>Usuário:</label>
+                            <input
+                                type='text'
+                                name='userUser'
+                                value={newUser.userUser}
+                                onChange={(e) =>
+                                    setNewUser({ ...newUser, userUser: e.target.value})
+                                }
+                            />
+                        </div>
+                        <div>
+                            <label>Nível:</label>
+                            <input
+                                type='text'
+                                name='userLevel'
+                                value={newUser.userLevel}
+                                onChange={(e) =>
+                                    setNewUser({ ...newUser, userLevel: e.target.value})
+                                }
+                            />
+                        </div>
+                        <div>
+                        <label>Status:</label>
+                            <input
+                                type='checkbox'
+                                name='userStatus'
+                                checked={newUser.userStatus}
+                                onChange={(e) =>
+                                    setNewUser({ ...newUser, userStatus: e.target.checked})
+                                }
+                            />
+                        </div>
+                        <button type='submit'>Salvar</button>
+                        <button onClick={() => setEditUserById(null)}>Cancelar</button>
+                    </form>
+                </div>
+            )}
         </div>
     );
 }
