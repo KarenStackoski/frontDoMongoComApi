@@ -9,7 +9,7 @@ import CreateUsers from './Menu/Users/CreateUser/Create'
 import Teachers from './Menu/Teachers/Teachers'
 import CreateTeachers from './Menu/Teachers/CreateTeacher/TeachersCreate'
 import Students from './Menu/Students/Students';
-import CreateStudents from './Menu/Students/CreateStudents/Create'; 
+import CreateStudents from './Menu/Students/CreateStudents/StudentsCreate'; 
 import Events from './Menu/Events/Events';
 import CreateEvents from './Menu/Events/CreateEvents/CreateEvents';
 
