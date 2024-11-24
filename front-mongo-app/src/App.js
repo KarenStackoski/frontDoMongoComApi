@@ -1,61 +1,84 @@
-import './App.css';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import users from './users.json'; // Importa o arquivo JSON
+import React, { useState } from 'react';
+import './App.css';  // Importando o CSS para estilização
 
-function App() {
-  const navigate = useNavigate();
-  const [login, setLogin] = useState('');
+const App = () => {
+  const [userUser, setUserUser] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Impede o comportamento padrão do formulário
+  const handleLogin = async () => {
+    // Antes de enviar a requisição, limpa qualquer mensagem de erro
+    setErrorMessage('');
+    setIsLoading(true); // Começa o estado de loading
 
-    // Verifica as credenciais no JSON
-    const user = users.find(
-      (user) => user.username === login && user.password === password
-    );
+    try {
+      // Envia a requisição para o backend
+      const response = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userUser, password }), // Envia as credenciais
+      });
 
-    if (user) {
-      navigate('/menu'); // Navega para a página Menu
-    } else {
-      setError('Login ou senha inválidos!');
+      // Verifica se a resposta foi bem-sucedida
+      if (!response.ok) {
+        throw new Error('Login falhou. Verifique suas credenciais.');
+      }
+
+      // Caso a resposta seja bem-sucedida, obtemos os dados do usuário
+      const data = await response.json();
+      console.log('Login bem-sucedido', data);
+
+      // Limpar os campos de input após login bem-sucedido
+      setUserUser('');
+      setPassword('');
+
+      // Redirecionar ou executar outras ações aqui se necessário
+      // Exemplo: redirecionar para uma página de dashboard
+      // window.location.href = '/dashboard';
+
+    } catch (error) {
+      // Caso ocorra algum erro, mostramos a mensagem de erro
+      console.error('Erro no login:', error);
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false); // Finaliza o estado de loading
     }
   };
 
   return (
-    <div className="App">
-      <form className="form" onSubmit={handleLogin}>
-        <div id="loginBox">
-          <label htmlFor="login">Login</label>
-          <input
-            type="text"
-            id="loginInput"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
-          />
-        </div>
-        <div id="passwordBox">
-          <label htmlFor="password">Senha</label>
-          <input
-            type="password"
-            id="passwordInput"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && <p className="error">{error}</p>}
-        <button
-          id="submitLogin"
-          title="Acessar sua conta para prosseguir"
-          type="submit"
-        >
-          Entrar
-        </button>
-      </form>
+    <div className="login-container">
+      <h2>Login</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      <div className="input-container">
+        <label htmlFor="userUser">Usuário:</label>
+        <input
+          type="text"
+          id="userUser"
+          value={userUser}
+          onChange={(e) => setUserUser(e.target.value)}
+          placeholder="Digite seu nome de usuário"
+          required
+        />
+      </div>
+      <div className="input-container">
+        <label htmlFor="password">Senha:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Digite sua senha"
+          required
+        />
+      </div>
+      <button onClick={handleLogin} disabled={isLoading}>
+        {isLoading ? 'Carregando...' : 'Entrar'}
+      </button>
     </div>
   );
-}
+};
 
 export default App;
