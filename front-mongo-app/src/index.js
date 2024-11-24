@@ -24,7 +24,7 @@ root.render(
         <Route path="/students" element={<Students />} /> {/* Rota para lista de Alunos */}
         <Route path="/createStudents" element={<CreateStudents />} /> {/* Rota para criar Alunos */}
         <Route path='/Events' element={<Events/>}/>
-        <Route path='/CreateEvents' element={<CreateEvents/>}/>
+        <Route path='/createEvent' element={<CreateEvents />} />
 
       </Routes>
     </BrowserRouter>
