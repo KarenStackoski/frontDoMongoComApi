@@ -30,7 +30,7 @@ root.render(
         <Route path="/students" element={<Students />} />
         <Route path="/createStudents" element={<CreateStudents />} />
         <Route path='/Events' element={<Events/>}/>
-        <Route path='/CreateEvents' element={<CreateEvents/>}/>
+        <Route path='/createEvent' element={<CreateEvents />} />
 
 
       </Routes>
