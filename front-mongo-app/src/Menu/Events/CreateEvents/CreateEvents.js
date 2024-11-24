@@ -1,6 +1,7 @@
 import './CreateEvents.css';
 import React, { useState } from 'react';
-import apiConfig from '../../../api/apiConfig'; // Caminho correto para o apiConfig.js
+import apiConfig from '../../../api/apiConfig'; 
+
 
 function CreateEvents() {
     const [newEvent, setNewEvent] = useState({

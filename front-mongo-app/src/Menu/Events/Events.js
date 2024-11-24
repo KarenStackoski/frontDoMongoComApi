@@ -73,7 +73,8 @@ function Events() {
     // Função para navegar até a página de criação de evento
     const handleCreateEvent = (e) => {
         e.preventDefault();
-        navigate('/createEvent');
+        navigate('/CreateEvent');
+
     };
 
     useEffect(() => {
