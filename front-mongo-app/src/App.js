@@ -1,7 +1,6 @@
 import './App.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import users from './users.json'; // Importa o arquivo JSON
 
 function App() {
   const navigate = useNavigate();
@@ -9,18 +8,27 @@ function App() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault(); // Impede o comportamento padrão do formulário
 
-    // Verifica as credenciais no JSON
-    const user = users.find(
-      (user) => user.username === login && user.password === password
-    );
+    // Envia uma requisição para a API para verificar as credenciais
+    try {
+      const response = await fetch('http://localhost:8080/users'); // Altere para o URL da sua API
+      const users = await response.json();
 
-    if (user) {
-      navigate('/menu'); // Navega para a página Menu
-    } else {
-      setError('Login ou senha inválidos!');
+      // Verifica se as credenciais estão corretas
+      const user = users.find(
+        (user) => user.userUser === login && user.userPassword === password
+      );
+
+      if (user) {
+        navigate('/menu'); // Navega para a página Menu
+      } else {
+        setError('Login ou senha inválidos!');
+      }
+    } catch (error) {
+      setError('Erro ao conectar com o servidor.');
+      console.error('Error:', error);
     }
   };
 
