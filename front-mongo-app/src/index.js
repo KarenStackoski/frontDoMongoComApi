@@ -14,6 +14,8 @@ import Events from './Menu/Events/Events';
 import CreateEvents from './Menu/Events/CreateEvents/CreateEvents';
 import CreateProfessionals from './Menu/Professionals/CreateProfessionals/CreateProfessionals';
 import Professionals from './Menu/Professionals/Professionals';
+import Appointments from './Menu/Appointments/Appointments';
+import CreateAppointments from './Menu/Appointments/CreateAppointments/Create';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -34,6 +36,9 @@ root.render(
         <Route path='/createEvent' element={<CreateEvents />} />
         <Route path='/createprofessionals' element={<CreateProfessionals />} />
         <Route path='/professionals' element={<Professionals />} />
+        <Route path='/Appointments' element={<Appointments/>}/>
+        <Route path='/createAppointment' element={<CreateAppointments />} />
+
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -20,6 +20,10 @@ function Menu() {
       };
       
 
+      const handleAppointments = (e) => {
+        e.preventDefault(); // Impede o comportamento padrão do formulário
+        navigate('/appointments'); // Navega para a página Menu
+      };
 
     const handleNavigation = (path) => {
         navigate(path); // Navega para a rota especificada
@@ -36,7 +40,7 @@ function Menu() {
             <button className="options" onClick={() => handleNavigation('/students')}>Alunos</button>
             <button className="options" onClick={handleProfessionals}>Profissionais</button>
             <button className="options" onClick={() => handleNavigation('/Events')}>Eventos</button>
-            <button className="options" onClick={() => handleNavigation('/schedules')}>Agendamentos</button>
+            <button className="options" onClick={handleAppointments}>Agendamentos</button>
 
         </div>
     );
