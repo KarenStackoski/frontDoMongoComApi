@@ -14,11 +14,18 @@ function Menu() {
         navigate('/teachers'); // Navega para a página Menu
       };
 
+      const handleProfessionals = (e) => {
+        e.preventDefault();
+        navigate('/professionals'); // Navega para a página de profissionais
+      };
+      
+
 
     const handleNavigation = (path) => {
         navigate(path); // Navega para a rota especificada
 
     };
+
 
     return (
         <div>
@@ -27,7 +34,7 @@ function Menu() {
             <button className="options" onClick={handleUser}>Usuários</button>
             <button className="options" onClick={handleTeachers}>Professores</button>
             <button className="options" onClick={() => handleNavigation('/students')}>Alunos</button>
-            <button className="options" onClick={() => handleNavigation('/professionals')}>Profissionais</button>
+            <button className="options" onClick={handleProfessionals}>Profissionais</button>
             <button className="options" onClick={() => handleNavigation('/Events')}>Eventos</button>
             <button className="options" onClick={() => handleNavigation('/schedules')}>Agendamentos</button>
 

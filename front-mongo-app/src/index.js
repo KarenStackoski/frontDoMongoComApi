@@ -12,7 +12,8 @@ import Students from './Menu/Students/Students';
 import CreateStudents from './Menu/Students/CreateStudents/StudentsCreate'; 
 import Events from './Menu/Events/Events';
 import CreateEvents from './Menu/Events/CreateEvents/CreateEvents';
-
+import CreateProfessionals from './Menu/Professionals/CreateProfessionals/CreateProfessionals';
+import Professionals from './Menu/Professionals/Professionals';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -31,8 +32,8 @@ root.render(
         <Route path="/createStudents" element={<CreateStudents />} />
         <Route path='/Events' element={<Events/>}/>
         <Route path='/createEvent' element={<CreateEvents />} />
-
-
+        <Route path='/createprofessionals' element={<CreateProfessionals />} />
+        <Route path='/professionals' element={<Professionals />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
