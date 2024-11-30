@@ -6,9 +6,8 @@ import apiConfig from '../../../api/apiConfig';
 function CreateAppointment() {
     const navigate = useNavigate();
 
-    const [appointments, setAppointments] = useState([]);
     const [newAppointment, setNewAppointment] = useState({
-        speciality: '',
+        specialty: '',   
         comments: '',
         date: '',
         student: '',
@@ -16,19 +15,43 @@ function CreateAppointment() {
     });
 
     const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
         setNewAppointment((prevAppointment) => ({
             ...prevAppointment,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: value
         }));
+    };
+
+    // Função para formatar a data corretamente no formato YYYY-MM-DDTHH:mm
+    const formatDateTimeLocal = (dateTime) => {
+        const dateObj = new Date(dateTime);
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;  // Formato para datetime-local
     };
 
     const postAppointment = async () => {
         try {
-            const response = await apiConfig.post('/appointments', newAppointment);
-            setAppointments([...appointments, response.data]);
+            // Não converter para ISO aqui, apenas enviar o horário local no formato correto
+            const localDate = new Date(newAppointment.date);  // A data vem sem fuso horário
+            const formattedDate = localDate.toISOString();  // Aqui o `toISOString` ainda pode afetar, então vamos garantir a hora local
+
+            const appointmentData = {
+                specialty: newAppointment.specialty,
+                comments: newAppointment.comments,
+                date: formattedDate,  // Envia no formato ISO com hora local
+                student: newAppointment.student,
+                professional: newAppointment.professional
+            };
+
+            const response = await apiConfig.post('/appointments', appointmentData); // Criando novo agendamento
+
+            console.log('Agendamento criado com sucesso:', response.data);
             setNewAppointment({
-                speciality: '',
+                specialty: '',
                 comments: '',
                 date: '',
                 student: '',
@@ -36,12 +59,11 @@ function CreateAppointment() {
             });
             navigate('/appointments');
         } catch (error) {
-            console.log('Erro ao criar agendamento:', error);
+            console.log('Erro ao criar agendamento:', error.response ? error.response.data : error);
         }
     };
 
     const handleSubmit = (e) => {
-        console.log('handleSubmit');
         e.preventDefault();
         postAppointment();
     };
@@ -54,8 +76,8 @@ function CreateAppointment() {
                     <label>Especialidade</label>
                     <input
                         type="text"
-                        name="speciality"
-                        value={newAppointment.speciality}
+                        name="specialty"
+                        value={newAppointment.specialty}
                         onChange={handleInputChange}
                     />
                 </div>
@@ -87,7 +109,7 @@ function CreateAppointment() {
                     />
                 </div>
                 <div className="divInput">
-                    <label>Nome do profissional</label>
+                    <label>Nome do Profissional</label>
                     <input
                         type="text"
                         name="professional"

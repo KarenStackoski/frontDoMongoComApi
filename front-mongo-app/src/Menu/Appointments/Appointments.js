@@ -4,18 +4,10 @@ import apiConfig from '../../api/apiConfig';
 
 function Appointments() {
     const navigate = useNavigate();
-    console.log('Buscando todos os agendamentos...');
-
-
-    // speciality: String,
-    // comments: String,
-    // date: String,
-    // student: String,
-    // professional: String,
 
     const [appointments, setAppointments] = useState([]);
     const [newAppointment, setNewAppointment] = useState({
-        speciality: '',
+        specialty: '',
         comments: '',
         date: '',
         student: '',
@@ -24,12 +16,20 @@ function Appointments() {
 
     const [editAppointmentById, setEditAppointmentById] = useState(null);
 
+    // Função para formatar a data corretamente para o campo datetime-local (YYYY-MM-DDTHH:mm)
+    const formatDateTimeLocal = (dateTime) => {
+        const dateObj = new Date(dateTime);
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;  // Formato para datetime-local
+    };
+
     const getAppointments = async () => {
-        console.log('Buscando todos os agendamentos...');
-        
         try {
             const response = await apiConfig.get('/appointments');
-            console.log('Agendamentos retornados:', response.data);
             setAppointments(response.data);
         } catch (error) {
             console.log('Erro ao buscar todos os agendamentos:', error);
@@ -38,23 +38,40 @@ function Appointments() {
 
     const handleEditAppointment = (appointment) => {
         setEditAppointmentById(appointment._id);
+
+        // Formatar a data para o formato correto (YYYY-MM-DDTHH:mm)
+        const formattedDate = formatDateTimeLocal(appointment.appointmentDate);
+
         setNewAppointment({
-            appointmentName: appointment.appointmentName,
-            speciality: appointment.speciality,
-            comments: appointment.comments,
-            date: appointment.date,
-            student: appointment.student,
-            professional: appointment.professional
+            specialty: appointment.appointmentSpeciality,
+            comments: appointment.appointmentComments,
+            date: formattedDate, // Atualiza com a data formatada
+            student: appointment.appointmentStudent,
+            professional: appointment.appointmentProfessional
         });
+    };
+
+    // Função para ajustar a data para o fuso horário UTC
+    const convertToUTC = (dateTime) => {
+        const localDate = new Date(dateTime);
+        // Ajusta para UTC (subtraindo a diferença do fuso horário local)
+        const utcDateTime = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
+        return utcDateTime.toISOString(); // Retorna no formato UTC (YYYY-MM-DDTHH:mm:ss.sssZ)
     };
 
     const postAppointment = async () => {
         try {
-            const response = await apiConfig.post('/appointments', newAppointment);
+            const formattedDateTime = convertToUTC(newAppointment.date); // Converte para UTC antes de enviar
+
+            const appointmentData = {
+                ...newAppointment,
+                date: formattedDateTime // Data e hora formatada para envio
+            };
+
+            const response = await apiConfig.post('/appointments', appointmentData);
             setAppointments([...appointments, response.data]);
             setNewAppointment({
-                appointmentName: '',
-                speciality: '',
+                specialty: '',
                 comments: '',
                 date: '',
                 student: '',
@@ -67,16 +84,22 @@ function Appointments() {
 
     const putAppointmentById = async () => {
         try {
-            const response = await apiConfig.put(`/appointments/${editAppointmentById}`, newAppointment);
+            const formattedDateTime = convertToUTC(newAppointment.date);  // Converte para UTC antes de enviar
+
+            const appointmentData = {
+                ...newAppointment,
+                date: formattedDateTime // Envia a data ajustada para UTC
+            };
+
+            const response = await apiConfig.put(`/appointments/${editAppointmentById}`, appointmentData);
             setAppointments(
                 appointments.map((appointment) => 
                     appointment._id === editAppointmentById ? response.data : appointment
                 )
             );
-            setEditAppointmentById(null);
+            setEditAppointmentById(null);  // Resetar o ID de edição
             setNewAppointment({
-                appointmentName: '',
-                speciality: '',
+                specialty: '',
                 comments: '',
                 date: '',
                 student: '',
@@ -132,12 +155,12 @@ function Appointments() {
                 <tbody>
                     {appointments.map((appointment) => (
                         <tr key={appointment._id}>
-                            <td scope='row'>{appointment._id}</td>
-                            <td>{appointment.speciality}</td>
-                            <td>{appointment.comments}</td>
-                            <td>{appointment.date}</td>
-                            <td>{appointment.student}</td>
-                            <td>{appointment.professional}</td>
+                            <td>{appointment._id}</td>
+                            <td>{appointment.appointmentSpeciality}</td>
+                            <td>{appointment.appointmentComments}</td>
+                            <td>{formatDateTimeLocal(appointment.appointmentDate)}</td>
+                            <td>{appointment.appointmentStudent}</td>
+                            <td>{appointment.appointmentProfessional}</td>
                             <td>
                                 <button onClick={() => deleteAppointmentById(appointment._id)}>Deletar</button>
                                 <button onClick={() => handleEditAppointment(appointment)}>Editar</button>
@@ -152,37 +175,28 @@ function Appointments() {
                     <h1>Editando Agendamento</h1>
                     <form onSubmit={handleSubmit}>
                         <div>
-                            <label>Nome:</label>
-                            <input
-                                type='text'
-                                name='appointmentName'
-                                value={newAppointment.appointmentName}
-                                onChange={(e) => setNewAppointment({ ...newAppointment, appointmentName: e.target.value })}
-                            />
-                        </div>
-                        <div>
                             <label>Especialidade:</label>
                             <input
-                                type='text'
-                                name='speciality'
-                                value={newAppointment.speciality}
-                                onChange={(e) => setNewAppointment({ ...newAppointment, speciality: e.target.value })}
+                                type="text"
+                                name="specialty"
+                                value={newAppointment.specialty}
+                                onChange={(e) => setNewAppointment({ ...newAppointment, specialty: e.target.value })}
                             />
                         </div>
                         <div>
                             <label>Comentários:</label>
                             <input
-                                type='text'
-                                name='comments'
+                                type="text"
+                                name="comments"
                                 value={newAppointment.comments}
                                 onChange={(e) => setNewAppointment({ ...newAppointment, comments: e.target.value })}
                             />
                         </div>
                         <div>
-                            <label>Data:</label>
+                            <label>Data e Hora:</label>
                             <input
-                                type='date'
-                                name='date'
+                                type="datetime-local"
+                                name="date"
                                 value={newAppointment.date}
                                 onChange={(e) => setNewAppointment({ ...newAppointment, date: e.target.value })}
                             />
@@ -190,8 +204,8 @@ function Appointments() {
                         <div>
                             <label>Estudante:</label>
                             <input
-                                type='text'
-                                name='student'
+                                type="text"
+                                name="student"
                                 value={newAppointment.student}
                                 onChange={(e) => setNewAppointment({ ...newAppointment, student: e.target.value })}
                             />
@@ -199,13 +213,13 @@ function Appointments() {
                         <div>
                             <label>Profissional:</label>
                             <input
-                                type='text'
-                                name='professional'
+                                type="text"
+                                name="professional"
                                 value={newAppointment.professional}
                                 onChange={(e) => setNewAppointment({ ...newAppointment, professional: e.target.value })}
                             />
                         </div>
-                        <button type='submit'>Salvar</button>
+                        <button type="submit">Salvar</button>
                         <button onClick={() => setEditAppointmentById(null)}>Cancelar</button>
                     </form>
                 </div>
