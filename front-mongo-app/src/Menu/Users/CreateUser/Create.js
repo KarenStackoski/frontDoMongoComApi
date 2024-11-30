@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Create.css'
+import './Create.css';
 import apiConfig from '../../../api/apiConfig';
 
 function CreateUser() {
@@ -12,11 +12,12 @@ function CreateUser() {
         userEmail: '',
         userUser: '',
         userLevel: '',
-        userStatus: false
+        userStatus: false,
+        userPassword: ''  // Campo de senha adicionado
     });
 
     const handleInputChange = (e) => {
-        const {name, value, type, checked} = e.target;
+        const { name, value, type, checked } = e.target;
         setNewUser((prevUser) => ({
             ...prevUser,
             [name]: type === 'checkbox' ? checked : value
@@ -32,7 +33,8 @@ function CreateUser() {
                 userEmail: '',
                 userUser: '',
                 userLevel: '',
-                userStatus: false
+                userStatus: false,
+                userPassword: ''  // Limpar o campo de senha após o envio
             });
             navigate('/users');
         } catch (error) {
@@ -45,44 +47,51 @@ function CreateUser() {
         postUser();
     }
 
-    return(
+    return (
         <div>
             <h1>Criando novo Usuário</h1>
             <form onSubmit={handleSubmit}>
                 <div className="divInput">
                     <label>Nome</label>
                     <input type="text"
-                    name='userName'
-                    value={newUser.userName}
-                    onChange={handleInputChange}></input>
+                        name='userName'
+                        value={newUser.userName}
+                        onChange={handleInputChange}></input>
                 </div>
                 <div className="divInput">
                     <label>E-mail</label>
                     <input type="text"
-                    name='userEmail'
-                    value={newUser.userEmail}
-                    onChange={handleInputChange}></input>
+                        name='userEmail'
+                        value={newUser.userEmail}
+                        onChange={handleInputChange}></input>
                 </div>
                 <div className="divInput">
                     <label>Usuário</label>
                     <input type="text"
-                    name='userUser'
-                    value={newUser.userUser}
-                    onChange={handleInputChange}></input>
+                        name='userUser'
+                        value={newUser.userUser}
+                        onChange={handleInputChange}></input>
                 </div>
                 <div className="divInput">
                     <label>Nível de usuário</label>
-                    <input type="select"
-                    name='userLevel'
-                    value={newUser.userLevel}
-                    onChange={handleInputChange}></input>
+                    <input type="text"
+                        name='userLevel'
+                        value={newUser.userLevel}
+                        onChange={handleInputChange}></input>
                 </div>
                 <div className="divInput">
                     <label>Status</label>
-                    <input type="checkBox"
-                    name='userStatus'
-                    value={newUser.userStatus}
-                    onChange={handleInputChange}></input>
+                    <input type="checkbox"
+                        name='userStatus'
+                        checked={newUser.userStatus}
+                        onChange={handleInputChange}></input>
+                </div>
+                <div className="divInput">
+                    <label>Senha</label>
+                    <input type="password"
+                        name='userPassword'
+                        value={newUser.userPassword}
+                        onChange={handleInputChange}></input>
                 </div>
                 <button type='submit'>Salvar</button>
             </form>
