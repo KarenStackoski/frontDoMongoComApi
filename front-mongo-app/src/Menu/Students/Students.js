@@ -121,9 +121,9 @@ function Students() {
                             <input
                                 type="text"
                                 name="studentsName"
-                                value={newStudents.StudentsName}
+                                value={newStudents.studentsName}
                                 onChange={(e) =>
-                                    setNewStudents({ ...newStudents, StudentsName: e.target.value })
+                                    setNewStudents({ ...newStudents, studentsName: e.target.value })
                                 }
                             />
                         </div>
